@@ -21,9 +21,8 @@ const bot = createBot({
 
         if(capture[4]){
           ex = +capture[4];
-        } else {
-          ex = 10;
         }
+        
         if(capture[5]){
           rote = true;
         }
