@@ -9,7 +9,7 @@ export function makeRoll(
   const rolls: number[] = [];
 
   for (let i = 0; i < count; i++) {
-    const res = rollDie(sides);
+    const res = rollDie({ sides });
     rolls.push(res);
     if (res >= ex) {
       rolls.push(makeRoll({ count: 1, sides, ex, rote: false })[0]);
