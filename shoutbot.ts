@@ -1,4 +1,3 @@
-import { crypto } from "https://deno.land/std@0.178.0/crypto/mod.ts";
 import {
   createBot,
   Intents,
@@ -6,6 +5,7 @@ import {
   startBot,
 } from "https://deno.land/x/discordeno@18.0.1/mod.ts";
 import "https://deno.land/x/dotenv@v3.2.2/load.ts";
+import { makeRoll } from "./dice.ts";
 
 const bot = createBot({
   // @ts-ignore: Not actually undefined
@@ -59,34 +59,5 @@ const bot = createBot({
     },
   },
 });
-
-function makeRoll(
-  count: number,
-  sides: number,
-  ex: number,
-  rote: boolean,
-): Array<number> {
-  const rolls: number[] = [];
-
-  for (let i = 0; i < count; i++) {
-    const res = rollDie(sides);
-    rolls.push(res);
-    if (res >= ex) {
-      rolls.push(makeRoll(1, sides, ex, false)[0]);
-    } else if (res < 8 && rote) {
-      rolls.push(makeRoll(1, sides, ex, false)[0]);
-    }
-  }
-  return rolls;
-}
-
-function rollDie(sides: number): number {
-  const roll = new Uint8Array(1);
-  crypto.getRandomValues(roll);
-  if (roll[0] >= Math.floor(256 / sides) * sides) {
-    return rollDie(sides);
-  }
-  return 1 + (roll[0] % sides);
-}
 
 await startBot(bot);
