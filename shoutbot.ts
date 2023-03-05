@@ -8,12 +8,11 @@ const bot = createBot({
     ready() {
       console.log("Successfully connected to gateway");
     },
+    messageCreate(bot, message) {
+      console.log(message);
+    },
   },
-});
 
-// Another way to do events
-bot.events.messageCreate = function (b, message) {
-  // Process the message here with your command handler.
-};
+});
 
 await startBot(bot);
