@@ -1,8 +1,10 @@
 export function makeRoll(
-  count: number,
-  sides: number,
-  ex: number,
-  rote: boolean,
+  { count, sides, ex, rote }: {
+    count: number;
+    sides: number;
+    ex: number;
+    rote: boolean;
+  },
 ): Array<number> {
   const rolls: number[] = [];
 
@@ -10,9 +12,9 @@ export function makeRoll(
     const res = rollDie(sides);
     rolls.push(res);
     if (res >= ex) {
-      rolls.push(makeRoll(1, sides, ex, false)[0]);
+      rolls.push(makeRoll({ count: 1, sides, ex, rote: false })[0]);
     } else if (res < 8 && rote) {
-      rolls.push(makeRoll(1, sides, ex, false)[0]);
+      rolls.push(makeRoll({ count: 1, sides, ex, rote: false })[0]);
     }
   }
   return rolls;
