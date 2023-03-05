@@ -11,7 +11,7 @@ const bot = createBot({
       console.log("Successfully connected to gateway");
     },
     messageCreate(bot, message) {
-      const capture = /^!([0-9]{1,2})d([0-9]{1,2})(a([0-9]))?(r)?/.exec(message.content);
+      const capture = /^!([0-9]{1,2})d([0-9]{1,2})(a([8,9]))?(r)?/.exec(message.content);
       if(capture) {
         const count = capture[1];
         const sides = capture[2];
