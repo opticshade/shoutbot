@@ -23,8 +23,9 @@ export function makeRoll(
 function rollDie(sides: number): number {
   const roll = new Uint8Array(1);
   crypto.getRandomValues(roll);
-  if (roll[0] >= Math.floor(256 / sides) * sides) {
-    return rollDie(sides);
+  let value = roll[0];
+  if (value >= Math.floor(256 / sides) * sides) {
+    value = rollDie(sides);
   }
-  return 1 + (roll[0] % sides);
+  return 1 + (value % sides);
 }
