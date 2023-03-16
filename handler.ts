@@ -5,7 +5,7 @@ import {
 } from "https://deno.land/x/discordeno@18.0.1/mod.ts";
 import { makeRoll } from "./dice.ts";
 
-export function handleMessage(bot: Bot, message: Message) {
+export async function handleMessage(bot: Bot, message: Message) {
   const capture = /^!([0-9]{1,2})d([0-9]{1,2})(a([8,9]))?(r)?/.exec(
     message.content,
   );
@@ -29,21 +29,21 @@ export function handleMessage(bot: Bot, message: Message) {
       return;
     }
     const rolled = makeRoll({ count: +count, sides: +sides, ex, rote });
-    for (let i = 0; i < rolled.length; i++) {
-      if (rolled[i] >= ex) {
-        rollmsg += `\**${rolled[i]}**`;
+    for await (const i of rolled) {
+      if (i >= ex) {
+        rollmsg += `\**${i}**`;
         successes++;
-      } else if (rolled[i] >= 8) {
-        rollmsg += `${rolled[i]}`;
+      } else if (i >= 8) {
+        rollmsg += `${i}`;
         successes++;
       } else {
-        rollmsg += `~~${rolled[i]}~~`;
+        rollmsg += `~~${i}~~`;
       }
-      if (i != rolled.length - 1) {
-        rollmsg += ",";
-      }
+      rollmsg += ",";
     }
+    rollmsg = rollmsg.slice(0, -1);
     rollmsg += `] for ${successes} successes.`;
+
     sendMessage(bot, message.channelId, { content: rollmsg });
   }
 }
