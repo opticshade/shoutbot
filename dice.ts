@@ -6,15 +6,15 @@ export function makeRoll(
     rote: boolean;
   },
 ): Array<number> {
-  const rolls: number[] = [];
+  let rolls: number[] = [];
 
   for (let i = 0; i < count; i++) {
     const res = rollDie(sides);
     rolls.push(res);
     if (res >= ex) {
-      rolls.push(makeRoll({ count: 1, sides, ex, rote: false })[0]);
+      rolls = rolls.concat(makeRoll({ count: 1, sides, ex, rote: false }));
     } else if (res < 8 && rote) {
-      rolls.push(makeRoll({ count: 1, sides, ex, rote: false })[0]);
+      rolls = rolls.concat(makeRoll({ count: 1, sides, ex, rote: false }));
     }
   }
   return rolls;
