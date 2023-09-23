@@ -20,6 +20,22 @@ export function makeRoll(
   return rolls;
 }
 
+
+export function makeNormRoll(
+  { count, sides }: {
+    count: number;
+    sides: number;
+  },
+): Array<number> {
+  let rolls: number[] = [];
+
+  for (let i = 0; i < count; i++) {
+    const res = rollDie(sides);
+    rolls.push(res);
+  }
+  return rolls;
+}
+
 function rollDie(sides: number): number {
   const roll = new Uint8Array(1);
   crypto.getRandomValues(roll);

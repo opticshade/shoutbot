@@ -3,7 +3,7 @@ import {
   Message,
   sendMessage,
 } from "https://deno.land/x/discordeno@18.0.1/mod.ts";
-import { makeRoll } from "./dice.ts";
+import { makeNormRoll, makeRoll } from "./dice.ts";
 
 export async function handleMessage(bot: Bot, message: Message) {
   const capture = /^!([0-9]{1,2})d([0-9]{1,2})(a([8,9]))?(r)?/.exec(
@@ -45,5 +45,24 @@ export async function handleMessage(bot: Bot, message: Message) {
     rollmsg += `] for ${successes} successes.`;
 
     sendMessage(bot, message.channelId, { content: rollmsg });
+  } else {
+    const capture = /^\.([0-9]{1,2})d([0-9]{1,2})/.exec(
+      message.content,
+    );
+    console.log(capture);
+    if (capture) {
+      const count = capture[1];
+      const sides = capture[2];
+      let rollmsg = `<@${message.member?.id}> just rolled [`;
+
+      const rolled = makeNormRoll({count: +count, sides: +sides});
+      for await (const i of rolled) {
+        rollmsg += `${i},`;
+      }
+      rollmsg = rollmsg.slice(0, -1);
+      rollmsg += `] = ${rolled.reduce((total, x) => total + x)}`;
+      sendMessage(bot, message.channelId, {content: rollmsg});
+    }
+
   }
 }
