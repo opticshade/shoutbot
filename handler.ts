@@ -70,7 +70,10 @@ export async function handleMessage(bot: Bot, message: Message) {
       total = rolled.reduce((total, x) => total + x);
 
       if(mod) {
-        rollmsg += `] ${total} ${capture[4]} ${mod} = ${total + mod}`;
+        if(capture[4] == '-') {
+          mod = -mod;
+        }
+        rollmsg += `] ${total} ${capture[4]} ${Math.abs(mod)} = ${total + mod}`;
       } else {
         rollmsg += `] = ${total}`;
       }
