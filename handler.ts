@@ -46,7 +46,7 @@ export async function handleMessage(bot: Bot, message: Message) {
 
     sendMessage(bot, message.channelId, { content: rollmsg });
   } else {
-    const capture = /^\.([0-9]{1,2})d([0-9]{1,2})\ *((\+|-)\ *([0-9]))?/.exec(
+    const capture = /^\.([0-9]{1,2})d([0-9]{1,2})\ *((\+|-)\ *([0-9]+))?/.exec(
       message.content,
     );
     console.log(capture);
