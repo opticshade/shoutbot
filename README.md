@@ -20,5 +20,5 @@ your nWod games!
 !<diecount>d<sides>[a<8|9>][r] so to roll 1d10 as a rote action with 9 again you
 do !1d10a9r For 1d10 as a rote do !1d10r
 
-For normal non CoD rolling do .<diecount>d<sides>
-.3d6 for example
+For normal non CoD rolling do .<diecount>d<sides>[<+|-><mod>]
+.3d6 for example or .3d6+10
