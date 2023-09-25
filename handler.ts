@@ -4,6 +4,8 @@ import {
   sendMessage,
 } from "https://deno.land/x/discordeno@18.0.1/mod.ts";
 import { makeNormRoll, makeRoll } from "./dice.ts";
+import { Eq } from '@pestras/eq';
+
 
 export async function handleMessage(bot: Bot, message: Message) {
   const capture = /^!([0-9]{1,2})d([0-9]{1,2})(a([8,9]))?(r)?/.exec(
@@ -46,21 +48,17 @@ export async function handleMessage(bot: Bot, message: Message) {
 
     sendMessage(bot, message.channelId, { content: rollmsg });
   } else {
-    const capture = /^\.([0-9]{1,2})d([0-9]{1,2})\ *((\+|-)\ *([0-9]+))?/.exec(
+    const capture = /^\.([0-9]{1,2})d([0-9]{1,2})(.*)/.exec(
       message.content,
     );
     console.log(capture);
     if (capture) {
       const count = capture[1];
       const sides = capture[2];
-      let mod = 0;
       let total = 0;
+      let mod = '';
       let rollmsg = `<@${message.member?.id}> just rolled [`;
       const rolled = makeNormRoll({count: +count, sides: +sides});
-
-      if(capture[4]) {
-        mod = +capture[5];
-      }
 
       for await (const i of rolled) {
         rollmsg += `${i},`;
@@ -68,12 +66,12 @@ export async function handleMessage(bot: Bot, message: Message) {
 
       rollmsg = rollmsg.slice(0, -1);
       total = rolled.reduce((total, x) => total + x);
-
-      if(mod) {
-        if(capture[4] == '-') {
-          mod = -mod;
-        }
-        rollmsg += `] ${total} ${capture[4]} ${Math.abs(mod)} = ${total + mod}`;
+      if(capture[3]) {
+        mod = capture[3].trim();
+      }
+      mod = `${total}${mod}`;
+      if(capture[3]) {
+        rollmsg += `] ${mod} = ${new Eq(mod).evaluate()}`;
       } else {
         rollmsg += `] = ${total}`;
       }
